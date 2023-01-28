@@ -1,0 +1,4 @@
+[__PROJECT_NAME__]
+port = __PROJECT_PORT__
+directory = __PROJECT_DIRECTORY__
+command = __PROJECT_COMMAND__

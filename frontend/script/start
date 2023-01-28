@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+. script/init
+
+script/stop
+
+npm install
+
+script/compile-invoker
+
+invoker start # --certificate=script/certs/server.crt --private-key=script/certs/server.key

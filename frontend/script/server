@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+. script/init
+
+yarn install
+
+yarn start

@@ -1,0 +1,1 @@
+ngrok http --subdomain=sample --region=eu 3013

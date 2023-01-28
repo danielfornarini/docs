@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+. script/init
+
+bundle exec sidekiq -q default -q mailers

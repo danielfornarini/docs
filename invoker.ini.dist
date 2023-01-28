@@ -1,0 +1,17 @@
+[docs-frontend]
+port = 4200
+directory = ./frontend
+command = script/server
+
+[docs-api]
+port = 3013
+directory = ./api
+command = script/server 3013 < /dev/null
+
+[mailhog]
+port=8025
+command=MailHog &> /dev/null
+
+[worker]
+directory = ./api
+command=script/worker

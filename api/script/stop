@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+. script/init
+
+lsof -n -i :$PROJECT_PORT | grep LISTEN | awk '{print $2}' | xargs kill -9

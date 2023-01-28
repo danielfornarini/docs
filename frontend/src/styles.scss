@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@layer base {
+  :root {
+    --color-primary: rgb(255, 115, 179);
+    --color-primary-dark: #{darken(rgb(255, 115, 179), 20%)};
+    --color-secondary: rgb(111, 114, 185);
+    --color-danger: rgb(220, 53, 69);
+    --color-warning: rgb(255, 193, 7);
+  }
+}

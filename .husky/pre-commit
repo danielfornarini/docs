@@ -1,0 +1,40 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd frontend
+yarn pretty-quick --staged --ignore-path ../.prettierignore
+
+cd ../api
+set +e
+RUBY_FILES="$(git diff --diff-filter=d --name-only --cached | grep -E '(Gemfile|Rakefile|\.(rb|rake|ru))$')"
+set -e
+PRE_STATUS="$(git status | wc -l)"
+
+USER=`whoami`
+PATH_CUSTOM="/Users/$USER/.rbenv/shims"
+if [[ ! $PATH == *"$PATH_CUSTOM"* ]];
+then
+    export PATH="$PATH_CUSTOM:"$PATH
+fi
+
+PATH_CUSTOM="/Users/$USER/.rbenv/bin"
+if [[ ! $PATH == *"$PATH_CUSTOM"* ]];
+then
+    export PATH="$PATH_CUSTOM:"$PATH
+fi
+
+if [[ -n $RUBY_FILES ]]; then
+  echo '\nRunning Rubocop...'
+  bundle exec rubocop -a $RUBY_FILES 2> /dev/null > /dev/null || echo "Done!\n"
+fi
+
+POST_STATUS="$(git status | wc -l)"
+
+if [[ $PRE_STATUS != $POST_STATUS ]]; then
+  echo "Re-added: $RUBY_FILES"
+  git add $RUBY_FILES
+fi
+
+cd ..
+
+exit 0

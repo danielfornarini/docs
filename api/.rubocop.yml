@@ -1,0 +1,34 @@
+AllCops:
+  Exclude:
+    - "db/schema.rb"
+    - "bin/**/*"
+    - "Guardfile"
+    - "spec/support/*.rb"
+    - "vendor/**/*"
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+Rails/SaveBang:
+  Enabled: true
+  Severity: error
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Rails/AfterCommitOverride:
+  Enabled: true
+
+Rails/AddColumnIndex:
+  Enabled: true
+  Severity: error
+
+Metrics/BlockLength:
+  Exclude:
+    - "config/**/*"
+    - "lib/tasks/**/*"
+    - "spec/**/*"
+
+Style/Documentation:
+  Enabled: false

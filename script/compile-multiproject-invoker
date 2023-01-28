@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [[ -f "invoker.ini.dist" ]]; then
+  root_folder=$(pwd)
+  echo '' > invoker.ini
+  for i in $(find . -name .monade -not -path '**/node_modules/*'); do
+    project_dir=$(dirname $i)
+
+    cd $project_dir
+
+    source .monade
+
+    cd $root_folder
+
+    ESCAPED_PROJECT_COMMAND=$(echo $PROJECT_COMMAND | sed -e 's/[]\/$*.^[]/\\&/g')
+    ESCAPED_PROJECT_DIR=$(echo $project_dir | sed -e 's/[]\/$*.^[]/\\&/g')
+
+
+    cat invoker.ini.template | \
+      sed "s/__PROJECT_NAME__/$PROJECT_NAME/g" | \
+      sed "s/__PROJECT_DIRECTORY__/$ESCAPED_PROJECT_DIR/g" | \
+      sed "s/__PROJECT_COMMAND__/$ESCAPED_PROJECT_COMMAND/g" | \
+      sed "s/__PROJECT_PORT__/$PROJECT_PORT/g" >> invoker.ini
+
+    echo '' >> invoker.ini
+  done
+  echo '' >> invoker.ini
+  cat 'invoker.ini.dist' >> invoker.ini
+fi

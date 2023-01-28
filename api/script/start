@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+. script/init
+
+script/stop
+bundle install -j 4
+#bin/rake db:create
+#bin/rake db:migrate
+bundler audit --update || exit 1
+
+script/compile-invoker
+
+invoker start # --certificate=script/certs/server.crt --private-key=script/certs/server.key

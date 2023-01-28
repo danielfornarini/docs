@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Common file between all projects
+# It loads all envs defined in .project
+
+set -o errexit
+set -o nounset
+
+if [[ ! -f .project ]]; then
+  echo "Missing file .project"
+  exit 1
+fi
+
+export $(cat .project | xargs)

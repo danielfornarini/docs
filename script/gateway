@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+moto_server apigateway -p4321

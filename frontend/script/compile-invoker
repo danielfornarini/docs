@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ ! -f "invoker.ini" ]]; then
+  if [[ -f "invoker.ini.dist" ]]; then
+    cp invoker.ini.dist invoker.ini
+    sed -i '' "s/__PROJECT_NAME__/$PROJECT_NAME/g" invoker.ini
+    sed -i '' "s/__PROJECT_PORT__/$PROJECT_PORT/g" invoker.ini
+  fi
+fi
