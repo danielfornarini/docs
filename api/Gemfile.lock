@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/monade/cognito_rails.git
-  revision: 3cba1758740e5ab1dcaa343f86816f240330a7e5
-  specs:
-    cognito_rails (0.0.0)
-      activesupport (>= 5, < 8)
-      aws-sdk-cognitoidentityprovider
-      jwt
-
-GIT
   remote: https://github.com/monade/monade_rails_generators.git
   revision: a54c013139ac56c62cab7dff1d808b13dc50d552
   specs:
@@ -112,23 +103,12 @@ GEM
     auto_preload (0.1.2)
       activerecord (>= 5, < 8)
       activesupport (>= 5, < 8)
-    aws-eventstream (1.2.0)
-    aws-partitions (1.674.0)
-    aws-sdk-cognitoidentityprovider (1.72.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.168.4)
-      aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.651.0)
-      aws-sigv4 (~> 1.5)
-      jmespath (~> 1, >= 1.6.1)
-    aws-sigv4 (1.5.2)
-      aws-eventstream (~> 1, >= 1.0.2)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     backport (1.2.0)
+    bcrypt (3.1.18)
     benchmark (0.2.1)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
@@ -160,8 +140,29 @@ GEM
       reline (>= 0.3.1)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    devise (4.8.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+    devise-i18n (1.10.2)
+      devise (>= 4.8.0)
+    devise-jwt (0.10.0)
+      devise (~> 4.0)
+      warden-jwt_auth (~> 0.6)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dry-auto_inject (0.9.0)
+      dry-container (>= 0.3.4)
+    dry-configurable (0.16.1)
+      dry-core (~> 0.6)
+      zeitwerk (~> 2.6)
+    dry-container (0.11.0)
+      concurrent-ruby (~> 1.0)
+    dry-core (0.9.1)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
     e2mmap (0.1.0)
     equalizer (0.0.11)
     erubi (1.12.0)
@@ -218,7 +219,6 @@ GEM
     irb (1.4.1)
       reline (>= 0.3.0)
     jaro_winkler (1.5.4)
-    jmespath (1.6.2)
     json-schema (2.8.1)
       addressable (>= 2.4)
     jsonapi-renderer (0.2.2)
@@ -270,6 +270,7 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     oj (3.13.21)
+    orm_adapter (0.5.0)
     parallel (1.22.1)
     parser (3.1.3.0)
       ast (~> 2.4.1)
@@ -333,6 +334,9 @@ GEM
       io-console (~> 0.5)
     repo-small-badge (0.2.7)
       victor (~> 0.2.8)
+    responders (3.0.1)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
@@ -458,9 +462,6 @@ GEM
     tty-which (0.4.2)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    underscorize_params (1.0.0)
-      actionpack (>= 5, < 8)
-      activesupport (>= 5, < 8)
     unicode-display_width (2.3.0)
     victor (0.2.8)
     virtus (1.0.5)
@@ -468,6 +469,13 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
+    warden (1.2.9)
+      rack (>= 2.0.9)
+    warden-jwt_auth (0.7.0)
+      dry-auto_inject (~> 0.8)
+      dry-configurable (~> 0.13)
+      jwt (~> 2.1)
+      warden (~> 1.2)
     webmock (3.18.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -492,9 +500,11 @@ DEPENDENCIES
   brakeman
   bundler-audit
   cancancan
-  cognito_rails!
   database_cleaner
   debug
+  devise
+  devise-i18n
+  devise-jwt
   factory_bot_rails
   fast_blank
   flamegraph
@@ -534,7 +544,6 @@ DEPENDENCIES
   stackprof
   standard (~> 1.9.0)
   tzinfo-data
-  underscorize_params
   webmock
   yard
 
