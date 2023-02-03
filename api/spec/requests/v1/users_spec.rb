@@ -3,6 +3,7 @@ require 'swagger_helper'
 RSpec.describe 'V1::Users', type: :request do
   extend UserAuthenticationContext
   include WardenRequestSpecHelper
+  include MailerHelpers
 
   path '/v1/users/{id}' do
     put 'update user' do
@@ -15,6 +16,7 @@ RSpec.describe 'V1::Users', type: :request do
       parameter name: :password, in: :formData, type: :string, required: false
       parameter name: :password_confirmation, in: :formData, type: :string, required: false
       parameter name: :profile_image, in: :formData, type: :file, required: false
+      parameter name: :email, in: :formData, type: :email, required: false
 
       response '401', 'Unauthorized' do
         let(:id) { create(:user).id }
@@ -57,6 +59,17 @@ RSpec.describe 'V1::Users', type: :request do
                 profileImage: String
               }
             })
+          end
+        end
+
+        response '200', 'send confirmation email to new email' do
+          let!(:id) { user.id }
+          let!(:email) { 'new_email@test.test' }
+          let!(:prev_name) { user.email }
+
+          run_test! do
+            expect(find_mail_to('new_email@test.test')).to be_truthy
+            expect(user.reload.email).to eq(prev_name)
           end
         end
 

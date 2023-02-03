@@ -20,4 +20,8 @@ class User < ApplicationRecord
     self.password_confirmation = password_confirmation
     save!
   end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end

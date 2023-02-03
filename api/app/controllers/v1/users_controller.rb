@@ -17,7 +17,8 @@ class V1::UsersController < ApplicationController
       :last_name,
       :password,
       :password_confirmation,
-      :profile_image
+      :profile_image,
+      :email
     )
   end
 end
