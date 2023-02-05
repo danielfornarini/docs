@@ -123,4 +123,32 @@ RSpec.describe 'V1::Users', type: :request do
       end
     end
   end
+
+  path '/v1/users/me' do
+    get 'gets current user' do
+      produces 'application/json'
+
+      response '401', 'Unauthorized' do
+        let!(:id) { create(:user).id }
+
+        run_test!
+      end
+
+      with_authenticated_user do
+        response '200', 'returned current user' do
+          run_test! do
+            expect(json).to match_structure(data: {
+              id: user.id.to_s,
+              type: 'users',
+              attributes: {
+                email: user.email,
+                firstName: user.first_name,
+                lastName: user.last_name
+              }
+            })
+          end
+        end
+      end
+    end
+  end
 end

@@ -20,6 +20,18 @@ Rails.application.routes.draw do
   end
 
   namespace :v1 do
-    api_resources :users, only: %i[update destroy]
+    api_resources :users, only: %i[update destroy] do
+      collection do
+        get :me
+      end
+    end
+
+    api_resources :documents
+
+    api_resources :contents, only: %i[show update] do
+      member do
+        get :versions
+      end
+    end
   end
 end

@@ -9,6 +9,10 @@ class V1::UsersController < ApplicationController
     default! @user
   end
 
+  def me
+    render_default! current_user
+  end
+
   private
 
   def update_params

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_29_142920) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_05_133819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_142920) do
 
   create_table "contents", force: :cascade do |t|
     t.bigint "document_id", null: false
-    t.text "text"
+    t.text "text", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_contents_on_document_id"
@@ -54,6 +54,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_142920) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "owner_id", null: false
+    t.index ["owner_id"], name: "index_documents_on_owner_id"
+  end
+
+  create_table "user_documents", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "document_id", null: false
+    t.integer "permission", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_user_documents_on_document_id"
+    t.index ["user_id", "document_id"], name: "index_user_documents_on_user_id_and_document_id", unique: true
+    t.index ["user_id"], name: "index_user_documents_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -78,7 +91,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_142920) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contents", "documents"
+  add_foreign_key "documents", "users", column: "owner_id"
+  add_foreign_key "user_documents", "documents"
+  add_foreign_key "user_documents", "users"
 end

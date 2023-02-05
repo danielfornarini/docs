@@ -10,6 +10,7 @@ class ApplicationController < ActionController::API
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, unless: :auth_controller?
+  before_action :set_paper_trail_whodunnit
 
   serialization_scope :serializer_context
   respond_to :json
