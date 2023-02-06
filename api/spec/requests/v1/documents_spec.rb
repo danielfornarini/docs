@@ -127,7 +127,7 @@ RSpec.describe 'V1::Documents', type: :request do
           run_test!
         end
 
-        response '403', 'user must have read permissions the document' do
+        response '403', 'user must have read permissions to read the document' do
           let!(:document) { create(:document) }
           let!(:id) { document.id }
 

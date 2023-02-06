@@ -96,7 +96,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_133819) do
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object"
+    t.json "object"
     t.datetime "created_at"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
