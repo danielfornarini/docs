@@ -34,10 +34,17 @@ jobs:
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
         with:
           ruby-version: "3.1"
+          bundler-cache: true
       - name: Install dependencies
-        run: bundle install
-      - name: Run tests
-        run: bundle exec rake
+        run: bundle install --path vendor/bundle
+      - name: Load schema
+        run: bin/rails db:schema:load
+      - name: Run audit
+        run: bundle exec bundle-audit check --update
+      - name: Run RSpec
+        run: bundle exec rpsec
+      - name: Run Ruby Critic
+        run: bundle exec rake rubycritic
       # - uses: joshmfrankel/simplecov-check-action@main
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
