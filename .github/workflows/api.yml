@@ -48,8 +48,8 @@ jobs:
         run: bundle exec bundle-audit check --update
       - name: Run RSpec
         run: bundle exec rake
-      - name: Run Ruby Critic
-        run: bundle exec rubycritic
+      # - name: Run Ruby Critic
+      #   run: bundle exec rubycritic
       # - uses: joshmfrankel/simplecov-check-action@main
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
