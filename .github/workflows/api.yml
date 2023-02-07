@@ -8,6 +8,7 @@ env:
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   REDIS_URL: redis://redis:6379
   ImageOS: ubuntu20
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
 jobs:
   test:
