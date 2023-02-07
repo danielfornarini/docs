@@ -37,13 +37,15 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        with:
-          ruby-version: "3.1"
-          bundler-cache: true
+      # - name: Set up Ruby
+      #   uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+      #   with:
+      #     ruby-version: "3.1"
+      #     bundler-cache: true
       - name: Update
         run: gem update --system
+      - name: Ruby
+        run: ruby -v
       - name: Install dependencies
         run: |
           bundle config set --local path 'vendor/bundle'
