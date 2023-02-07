@@ -3,8 +3,9 @@
 require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
-  default_host = "www.#{ENV['PROJECT_NAME']}.test"
-  secondary_host = "#{ENV['PROJECT_NAME']}.test"
+  default_host = "www.#{ENV.fetch('PROJECT_NAME', 'test')}.test"
+  secondary_host = "#{ENV.fetch('PROJECT_NAME', 'test')}.test"
+
   config.hosts << default_host << secondary_host
   default_url_options[:host] = default_host
   # Settings specified here will take precedence over those in config/application.rb.
