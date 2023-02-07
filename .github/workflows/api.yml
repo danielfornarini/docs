@@ -45,7 +45,9 @@ jobs:
       - name: Update
         run: gem update --system
       - name: Install dependencies
-        run: bundle config set --local path 'vendor/bundle'
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install
       - name: Load schema
         run: bin/rails db:schema:load
       - name: Run audit
