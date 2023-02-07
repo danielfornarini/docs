@@ -55,7 +55,7 @@ jobs:
       - name: Run audit
         run: bundle exec bundle-audit check --update
       - name: Run RSpec
-        run: bundle exec rpsec
+        run: bundle exec rake
       - name: Run Ruby Critic
         run: bundle exec rake rubycritic
       # - uses: joshmfrankel/simplecov-check-action@main
