@@ -8,6 +8,7 @@ env:
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   REDIS_URL: redis://redis:6379
   ImageOS: ubuntu20
+  POSTGRES_HOST_AUTH_METHOD: trust
 
 jobs:
   test:
@@ -19,12 +20,17 @@ jobs:
     services:
       postgres:
         image: postgres:latest
-        env:
-          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
           --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -35,8 +41,10 @@ jobs:
         with:
           ruby-version: "3.1"
           bundler-cache: true
+      - name: Update
+        run: gem update --system
       - name: Install dependencies
-        run: bundle install --path vendor/bundle
+        run: bundle config set --local path 'vendor/bundle'
       - name: Load schema
         run: bin/rails db:schema:load
       - name: Run audit
