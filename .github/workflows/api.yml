@@ -49,7 +49,7 @@ jobs:
       - name: Run RSpec
         run: bundle exec rake
       - name: Run Ruby Critic
-        run: bundle exec rake rubycritic
+        run: bundle exec rubycritic
       # - uses: joshmfrankel/simplecov-check-action@main
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
