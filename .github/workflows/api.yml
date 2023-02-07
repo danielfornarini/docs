@@ -8,7 +8,6 @@ env:
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   REDIS_URL: redis://redis:6379
   ImageOS: ubuntu20
-  POSTGRES_HOST_AUTH_METHOD: trust
 
 jobs:
   test:
@@ -20,6 +19,8 @@ jobs:
     services:
       postgres:
         image: postgres:latest
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
