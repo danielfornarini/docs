@@ -1,0 +1,43 @@
+<app-navbar
+  [sidebarOpened]="sidebarOpened"
+  (toggleSidebar)="toggleSidebar()"
+></app-navbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav autosize [opened]="sidebarOpened" mode="side" class="sidebar">
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ng-container [ngTemplateOutlet]="routerOutlet"></ng-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #routerOutlet>
+  <div class="" style="background-color: #f1f3f4">
+    <div class="container mx-auto px-24 py-6">
+      <span class="text-lg font-normal">Crea un nuovo documento</span>
+      <div class="flex mt-4">
+        <div class="w-36 cursor-pointer" (click)="newDocument()">
+          <img
+            src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank-googlecolors.png"
+            alt=""
+          />
+          <p class="mt-2">Vuoto</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container mx-auto px-16 my-4">
+    <div class="navbar">
+      <p class="text-lg px-7 mb-4">Documenti recenti</p>
+      <app-docs-list
+        [isLoading]="isLoading"
+        [documents]="documents"
+        (editDocument)="editDocument($event)"
+        (renameDocument)="renameDocument($event)"
+      ></app-docs-list>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</ng-template>
