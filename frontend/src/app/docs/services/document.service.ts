@@ -1,34 +1,62 @@
 import { Injectable } from '@angular/core';
+import { Document, DocumentDTO } from 'src/app/core/models';
 import {
-  concatMap,
-  filter,
-  first,
-  firstValueFrom,
-  Observable,
-  of,
-  timer,
-} from 'rxjs';
-import { Document } from 'src/app/core/models';
+  JSONAPIListQuery,
+  JSONAPIQuery,
+  parseJSON,
+  parseListWithMeta,
+  Response,
+} from '../../shared/parser';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService {
-  private mock: Document[] = [
-    { id: 1, title: 'Documento 1', updated_at: 1 },
-    { id: 2, title: 'Document di test', updated_at: 1 },
-    { id: 3, title: 'Tesi di laurea', updated_at: 1 },
-  ];
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  public getDocuments(): Observable<Document[]> {
-    const source = of(this.mock);
-
-    return timer(1000).pipe(concatMap(() => source));
+  getDocuments(query: JSONAPIListQuery = {}) {
+    return this.http
+      .get<Response>(environment.endpoint + `/documents`, {
+        params: { $$tag: 'get-documents', ...query },
+      })
+      .pipe(parseListWithMeta<Document>());
   }
 
-  public getDocument(documentId: number): Observable<Document> {
-    return of(this.mock.filter((element) => element.id === documentId)[0]);
+  getDocument(id: string | number, query: JSONAPIQuery = {}) {
+    return this.http
+      .get<Response>(environment.endpoint + `/documents/${id}`, {
+        params: { $$tag: 'get-document', ...query },
+      })
+      .pipe(parseJSON<Document>());
+  }
+
+  createDocument(dto: Nullable<Document>, query: JSONAPIQuery = {}) {
+    return this.http
+      .post<Response>(environment.endpoint + `/documents`, dto, {
+        params: { $$tag: 'create-document', ...query },
+      })
+      .pipe(parseJSON<Document>());
+  }
+
+  updateDocument(
+    id: string | number,
+    dto: Nullable<DocumentDTO>,
+    query: JSONAPIQuery = {}
+  ) {
+    return this.http
+      .put<Response>(environment.endpoint + `/documents/${id}`, dto, {
+        params: { $$tag: 'update-document', ...query },
+      })
+      .pipe(parseJSON<Document>());
+  }
+
+  destroyDocument(id: string | number, query: JSONAPIQuery = {}) {
+    return this.http
+      .delete<Response>(environment.endpoint + `/documents/${id}`, {
+        params: { $$tag: 'destroy-document', ...query },
+      })
+      .pipe(parseJSON<Document>());
   }
 }

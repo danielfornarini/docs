@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: 'http://docs-api.test',
+  endpoint: 'http://docs-api.test/v1',
   sentryDSN: null as string | null,
 };
 
