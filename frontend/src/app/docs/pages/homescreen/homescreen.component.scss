@@ -1,0 +1,42 @@
+.dev-toolbar_icon,
+.dev-toolbar_avatar,
+.dev-toolbar_title {
+  color: var(--color-gray);
+}
+
+.dev-toolbar_avatar {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.sidenav-container {
+  height: calc(100vh - 50px);
+  overflow: hidden;
+}
+
+.mat-drawer.sidebar {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  min-width: unset;
+  width: 300px;
+}
+
+// .document-item {
+//   border: 1px solid #dfe1e5;
+//   border-radius: 3px;
+//   cursor: pointer;
+//   padding: 1px;
+// }
+
+// .document-item-metadata {
+//   border-top: 1px solid #e2e2e2;
+//   padding-inline: 15px;
+//   padding-top: 8px;
+// }
+// .mat-card-image {
+//   width: 100%;
+//   margin: 0;
+//   margin-top: 0!important;
+// }

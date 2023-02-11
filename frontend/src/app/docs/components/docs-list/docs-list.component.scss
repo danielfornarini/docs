@@ -1,0 +1,30 @@
+.example-viewport {
+  width: 100%;
+}
+
+.document-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding-block: 10px;
+  padding-inline: 25px;
+  cursor: pointer;
+}
+
+.document-item:hover {
+  background-color: #e8f0fe;
+  border-radius: 25px;
+}
+
+.document-item_thumb {
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
+}
+
+.document-item_actions {
+  width: 48px;
+  height: 48px;
+  line-height: 1;
+}

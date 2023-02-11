@@ -3,9 +3,7 @@ import { Component } from '@angular/core';
 // eslint-disable-next-line @monade/angular/strategy-onpush
 @Component({
   selector: 'app-root',
-  template: `
-    <h1>docs</h1>
-  `,
+  template: ` <router-outlet></router-outlet> `,
   styles: [],
 })
 export class AppComponent {
