@@ -10,12 +10,13 @@ import { mergeMap, Observable, of } from 'rxjs';
 import { User } from '../core/models';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
+import { UserService } from '../core/services/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoAuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -25,7 +26,7 @@ export class NoAuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.authService.me().pipe(
+    return this.userService.me().pipe(
       mergeMap((me: User) => {
         this.router.navigate(['']);
         return of(false);

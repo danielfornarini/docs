@@ -66,12 +66,4 @@ export class AuthService {
       })
       .pipe(parseJSON<User>());
   }
-
-  me(): Observable<User> {
-    return this.http
-      .get<Response>(environment.endpoint + '/users/me', {
-        params: { $$tag: 'me' },
-      })
-      .pipe(parseJSON<User>());
-  }
 }
