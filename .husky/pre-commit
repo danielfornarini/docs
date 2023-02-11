@@ -26,6 +26,9 @@ fi
 if [[ -n $RUBY_FILES ]]; then
   echo '\nRunning Rubocop...'
   bundle exec rubocop -a $RUBY_FILES 2> /dev/null > /dev/null || echo "Done!\n"
+  echo 'Generating Swagger...'
+  rake swagger || echo "Done!\n"
+  git add swagger/v1/swagger.yaml 
 fi
 
 POST_STATUS="$(git status | wc -l)"

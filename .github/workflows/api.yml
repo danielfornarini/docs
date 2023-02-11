@@ -1,0 +1,55 @@
+name: API
+
+on: push
+
+env:
+  DATABASE_URL: postgres://postgres@postgres:5432/postgres
+  TEST_DATABASE_URL: postgres://postgres@postgres:5432/postgres
+  DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
+  REDIS_URL: redis://redis:6379
+  ImageOS: ubuntu20
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
+jobs:
+  test:
+    defaults:
+      run:
+        working-directory: ./api
+    runs-on: ubuntu-latest
+    container: ruby:3.1.0
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup
+        run: |
+          gem update --system
+          bundle config set --local path 'vendor/bundle'
+          bundle install
+          bin/rails db:schema:load
+      - name: Run audit
+        run: bundle exec bundle-audit check --update
+      - name: Run RSpec
+        run: bundle exec rake
+      # - name: Run Ruby Critic
+      #   run: bundle exec rubycritic
+      # - uses: joshmfrankel/simplecov-check-action@main
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}

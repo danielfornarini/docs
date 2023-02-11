@@ -1,0 +1,5 @@
+<p>  Welcome,  <%= @resource.full_name %>!</p>
+<p class="align-center">You can confirm your account email through the link below:</p>
+<p class="btn btn-outline-primary align-center"  >
+  <a href="<%="#{ENV.fetch('FRONTEND_URL', 'http://docs-frontend.test')}/confirmation?confirmation_token=#{@token}"%>">Confirm my account</a>
+</p>

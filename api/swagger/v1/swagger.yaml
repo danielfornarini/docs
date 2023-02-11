@@ -1,0 +1,429 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+securitySchemes:
+  Bearer:
+    description: Bearer JWT token generated from Cognito
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  "/v1/auth/password/forgot":
+    post:
+      summary: forgot password
+      parameters: []
+      responses:
+        "200":
+          description: sent forgot password
+        "404":
+          description: wrong email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+  "/v1/auth/password/reset":
+    post:
+      summary: reset password
+      parameters: []
+      responses:
+        "200":
+          description: correctly resetted password
+        "422":
+          description: password_confirmation doesn't match password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+  "/v1/contents/{id}":
+    get:
+      summary: load content
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "403":
+          description: user must have read permissions to read the content
+        "200":
+          description: returns the content
+    put:
+      summary: updates content
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "403":
+          description: user must have write permissions to update the content
+        "200":
+          description: updates the content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+  "/v1/contents/{id}/versions":
+    get:
+      summary: load content versions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "403":
+          description: user must have read permissions to read content versions
+        "200":
+          description: returns content versions
+  "/v1/documents":
+    get:
+      summary: list documents
+      responses:
+        "401":
+          description: Unauthorized
+        "200":
+          description: return paginated documents
+    post:
+      summary: create document
+      parameters: []
+      responses:
+        "401":
+          description: Unauthorized
+        "422":
+          description: missing required parameters
+        "200":
+          description: creates document
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                owner_id:
+                  type: integer
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                owner_id:
+                  type: integer
+  "/v1/documents/{id}":
+    get:
+      summary: gets document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "404":
+          description: document must exist
+        "403":
+          description: user must have read permissions to read the document
+        "200":
+          description: returns document
+    put:
+      summary: updates document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "404":
+          description: document must exist
+        "403":
+          description: user must have write permission to update the document
+        "200":
+          description: updates document
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+    delete:
+      summary: deletes document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "404":
+          description: document must exist
+        "403":
+          description: user must be the owner to destroy the document
+        "200":
+          description: deletes document
+  "/v1/users/{id}":
+    put:
+      summary: update user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "404":
+          description: user must exist
+        "403":
+          description: can edit only current user
+        "200":
+          description: send confirmation email to new email
+        "422":
+          description: password_confirmation doesn't match password
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+    delete:
+      summary: delete user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "401":
+          description: Unauthorized
+        "404":
+          description: user must exist
+        "403":
+          description: can delete only current user
+        "200":
+          description: deleted user
+  "/v1/users/me":
+    get:
+      summary: gets current user
+      responses:
+        "401":
+          description: Unauthorized
+        "200":
+          description: returned current user
+servers:
+  - url: https://{defaultHost}
+    variables:
+      defaultHost:
+        default: www.example.com
+components:
+  schemas:
+    document:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - documents
+        attributes:
+          type: object
+          properties:
+            title:
+              type: string
+            contentId:
+              type: string
+            createdAt:
+              type: string
+              format: date_time
+            updatedAt:
+              type: string
+              format: date_time
+          required:
+            - title
+            - contentId
+            - createdAt
+            - updatedAt
+        relationships:
+          type: object
+          properties:
+            owner:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                        - users
+      required:
+        - id
+        - type
+        - attributes
+    content:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - contents
+        attributes:
+          type: object
+          properties:
+            text:
+              type: string
+            documentId:
+              type: integer
+          required:
+            - text
+            - documentId
+        relationships:
+          type: object
+          properties: {}
+      required:
+        - id
+        - type
+        - attributes
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - users
+        attributes:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            profileImage:
+              type: string
+          required:
+            - firstName
+            - lastName
+            - email
+            - profileImage
+        relationships:
+          type: object
+          properties: {}
+      required:
+        - id
+        - type
+        - attributes
+    errors_object:
+      type: object
+      properties:
+        details:
+          type: object
+        errors:
+          type: object
+        message:
+          type: string
+      required:
+        - errors
+        - message
+    links:
+      type: object
+      properties:
+        self:
+          type: string
+          nullable: true
+        next:
+          type: string
+          nullable: true
+        last:
+          type: string
+          nullable: true
+      required:
+        - self
+        - next
+        - last
+    generic_model:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        attributes:
+          type: object
+        relationships:
+          type: object
