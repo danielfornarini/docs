@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, RegisterDTO } from '../../services/auth.service';
 import { PasswordMatching } from '../../validators/password-matching';
 
 @Component({
@@ -22,7 +22,7 @@ import { PasswordMatching } from '../../validators/password-matching';
                 placeholder="Email"
                 formControlName="email"
               />
-              <!-- Here we can display error messages/hints for the user, if one of the Validators adds an error to the email 
+              <!-- Here we can display error messages/hints for the user, if one of the Validators adds an error to the email
            with the .touched check we only display the hints if the input was touched by the users -->
               <mat-error
                 *ngIf="
@@ -46,30 +46,13 @@ import { PasswordMatching } from '../../validators/password-matching';
               <input
                 type="text"
                 matInput
-                placeholder="Username"
-                formControlName="username"
-              />
-              <mat-error
-                *ngIf="
-                  this.registerForm.get('username')?.touched &&
-                  this.registerForm.get('username')?.hasError('required')
-                "
-              >
-                Username is required</mat-error
-              >
-            </mat-form-field>
-
-            <mat-form-field>
-              <input
-                type="text"
-                matInput
                 placeholder="First Name"
-                formControlName="firstname"
+                formControlName="firstName"
               />
               <mat-error
                 *ngIf="
-                  this.registerForm.get('firstname')?.touched &&
-                  this.registerForm.get('firstname')?.hasError('required')
+                  this.registerForm.get('firstName')?.touched &&
+                  this.registerForm.get('firstName')?.hasError('required')
                 "
               >
                 First Name is required</mat-error
@@ -81,12 +64,12 @@ import { PasswordMatching } from '../../validators/password-matching';
                 type="text"
                 matInput
                 placeholder="Last Name"
-                formControlName="lastname"
+                formControlName="lastName"
               />
               <mat-error
                 *ngIf="
-                  this.registerForm.get('lastname')?.touched &&
-                  this.registerForm.get('lastname')?.hasError('required')
+                  this.registerForm.get('lastName')?.touched &&
+                  this.registerForm.get('lastName')?.hasError('required')
                 "
               >
                 Last Name is required</mat-error
@@ -115,12 +98,14 @@ import { PasswordMatching } from '../../validators/password-matching';
                 type="password"
                 matInput
                 placeholder="Password Confirmation"
-                formControlName="passwordConfirm"
+                formControlName="passwordConfirmation"
               />
               <mat-error
                 *ngIf="
-                  this.registerForm.get('passwordConfirm')?.touched &&
-                  this.registerForm.get('passwordConfirm')?.hasError('required')
+                  this.registerForm.get('passwordConfirmation')?.touched &&
+                  this.registerForm
+                    .get('passwordConfirmation')
+                    ?.hasError('required')
                 "
               >
                 Password Confirmation is required</mat-error
@@ -129,7 +114,7 @@ import { PasswordMatching } from '../../validators/password-matching';
 
             <mat-error
               *ngIf="
-                this.registerForm.get('passwordConfirm')?.dirty &&
+                this.registerForm.get('passwordConfirmation')?.dirty &&
                 this.registerForm.hasError('passwordsNotMatching')
               "
             >
@@ -152,12 +137,14 @@ import { PasswordMatching } from '../../validators/password-matching';
 export class RegisterComponent {
   registerForm = new FormGroup(
     {
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      username: new FormControl(null, [Validators.required]),
-      firstname: new FormControl(null, [Validators.required]),
-      lastname: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [Validators.required]),
-      passwordConfirm: new FormControl(null, [Validators.required]),
+      email: new FormControl<string>('', [
+        Validators.required,
+        Validators.email,
+      ]),
+      firstName: new FormControl<string>('', [Validators.required]),
+      lastName: new FormControl<string>('', [Validators.required]),
+      password: new FormControl<string>('', [Validators.required]),
+      passwordConfirmation: new FormControl<string>('', [Validators.required]),
     },
     { validators: PasswordMatching.passwordsMatching }
   );
@@ -168,8 +155,15 @@ export class RegisterComponent {
     if (!this.registerForm.valid) {
       return;
     }
+
+    const payload = {
+      user: {
+        ...this.registerForm.value,
+      },
+    };
+
     this.authService
-      .register(this.registerForm.value)
+      .register(payload as RegisterDTO)
       .pipe(tap(() => this.router.navigate(['documents'])))
       .subscribe();
   }

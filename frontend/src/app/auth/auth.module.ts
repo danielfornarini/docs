@@ -9,9 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthRoutingModule } from './auth-routing.module';
+import { ConfirmComponent } from './pages/confirm/confirm.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, ConfirmComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -25,6 +28,13 @@ import { AuthRoutingModule } from './auth-routing.module';
     MatFormFieldModule,
 
     AuthRoutingModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
 })
 export class AuthModule {}

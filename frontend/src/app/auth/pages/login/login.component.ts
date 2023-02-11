@@ -79,9 +79,15 @@ export class LoginComponent {
     if (!this.loginForm.valid) {
       return;
     }
-    this.authService
-      .login(this.loginForm.value)
-      .pipe(tap(() => this.router.navigate(['documents'])))
-      .subscribe();
+
+    const payload = {
+      user: {
+        ...this.loginForm.value,
+      },
+    };
+
+    this.authService.login(payload).subscribe((e) => {
+      this.router.navigate(['documents']);
+    });
   }
 }
