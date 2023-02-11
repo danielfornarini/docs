@@ -15,7 +15,7 @@ import { DocumentService } from '../../services/document.service';
         <div>
           <p>{{ document.title }}</p>
           <p class="text-sm text-gray-600">
-            Ultima modifica: {{ document.created_at || '-' }}
+            Ultima modifica: {{ document.createdAt || '-' }}
           </p>
         </div>
         <div class="ml-auto">

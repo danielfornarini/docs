@@ -5,6 +5,7 @@ import { Document } from 'src/app/core/models';
 import { EditTitleDialogComponent } from '../../components/edit-title-dialog/edit-title-dialog.component';
 import { NewDocumentDialogComponent } from '../../components/new-document-dialog/new-document-dialog.component';
 import { DocumentService } from '../../services/document.service';
+import { Response } from '../../../shared/parser';
 
 @Component({
   selector: 'app-homescreen',
@@ -23,8 +24,8 @@ export class HomescreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.documentService.getDocuments().subscribe((res: Document[]) => {
-      this.documents = res;
+    this.documentService.getDocuments().subscribe((res) => {
+      this.documents = res.data;
       this.isLoading = false;
     });
   }
